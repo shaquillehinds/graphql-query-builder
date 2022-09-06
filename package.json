@@ -1,0 +1,31 @@
+{
+  "name": "@shaquillehinds/graphql-query-builder",
+  "version": "0.0.2",
+  "description": "Simple function to build a graphql query",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shaquillehinds/graphql-query-builder"
+  },
+  "main": "dist/index.js",
+  "author": {
+    "name": "Shaquille Hinds",
+    "email": "shaquillehinds72@hotmail.com",
+    "url": "https://github.com/shaquillehinds"
+  },
+  "license": "ISC",
+  "rootDir": "src",
+  "private": false,
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "scripts": {
+    "build": "tsc -p ./ && uglifyjs dist/index.js -o dist/index.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.3",
+    "uglify-js": "^3.17.0"
+  }
+}
