@@ -1,0 +1,688 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AddressG {
+  firstName: String!
+  lastName: String!
+  address: String!
+  parish: Parish!
+  country: Country!
+  city: String
+  postalCode: String
+  latitude: Float
+  longitude: Float
+}
+
+enum Parish {
+  STLUCY
+  STPETER
+  STANDREW
+  STJAMES
+  STTHOMAS
+  STJOSEPH
+  STJOHN
+  STGEORGE
+  STMICHAEL
+  STPHILIP
+  CHRISTCHURCH
+  KINGSTON
+  PORTLAND
+  STCATHERINE
+  STMARY
+  STANN
+  MANCHESTER
+  CLARENDON
+  HANOVER
+  WESTMORELAND
+  TRELAWNY
+  STELIZABETH
+  ARIMA
+  PORTOFSPAIN
+  SANFERNANDO
+  TOBAGO
+  CHAGUANAS
+  COUVA
+  DIEGOMARTIN
+  MAYARO
+  PENAL
+  POINTFORTIN
+  PRINCESTOWN
+  SANJUAN
+  SANGREGRANDE
+  SIPARIA
+  TUNAPUNA
+}
+
+enum Country {
+  BB
+  JM
+  TT
+}
+
+type BankAccountG {
+  name: String!
+  number: String!
+  bank: String!
+  details: String
+}
+
+type PayoutRequestG {
+  active: Boolean!
+  amount: Float!
+}
+
+type RatingG {
+  total: Float!
+  raters: Float!
+  average: Float!
+}
+
+type UsersG {
+  _id: String!
+  admin: Boolean
+  username: String!
+  status: Status!
+  image: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  phone: String!
+  payoutRequest: PayoutRequestG
+  country: Country!
+  bankAccount: BankAccountG
+  totalEarnings: Float!
+  balance: Float!
+  availableBalance: Float!
+  listings: Float!
+  sold: Float!
+  rating: RatingG
+  createdAt: Float!
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  DELETED
+}
+
+type UnpopulatedUserG {
+  _id: String!
+  admin: Boolean
+  username: String!
+  status: Status!
+  image: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  phone: String!
+  payoutRequest: PayoutRequestG
+  country: Country!
+  bankAccount: BankAccountG
+  totalEarnings: Float!
+  balance: Float!
+  availableBalance: Float!
+  listings: Float!
+  sold: Float!
+  rating: RatingG
+  createdAt: Float!
+  addresses: [AddressG]!
+  fcmToken: String!
+  jwt: String
+  updatedAt: Float!
+  favoriteProducts: [String]!
+  favoriteSellers: [String]!
+  cart: [String]!
+}
+
+type UserG {
+  _id: String!
+  admin: Boolean
+  username: String!
+  status: Status!
+  image: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  phone: String!
+  payoutRequest: PayoutRequestG
+  country: Country!
+  bankAccount: BankAccountG
+  totalEarnings: Float!
+  balance: Float!
+  availableBalance: Float!
+  listings: Float!
+  sold: Float!
+  rating: RatingG
+  createdAt: Float!
+  addresses: [AddressG]!
+  fcmToken: String!
+  jwt: String
+  updatedAt: Float!
+  favoriteProducts: [UnpopulatedProductG]!
+  favoriteSellers: [UserG]!
+  cart: [UnpopulatedProductG]!
+}
+
+type SizeG {
+  measurement: Float
+  type: SizeTypeInput!
+}
+
+enum SizeTypeInput {
+  XXXS
+  XXS
+  XS
+  S
+  M
+  L
+  XL
+  XXL
+  XXXL
+}
+
+type ProductG {
+  _id: String!
+  country: Country!
+  name: String!
+  image: String!
+  images: [String!]!
+  condition: ConditionInput!
+  description: String!
+  category: String!
+  faults: String!
+  price: Float!
+  retailPrice: Float
+  brand: String
+  color: [String]
+  isClothing: Boolean!
+  material: String
+  size: SizeG
+  gender: GenderInput
+  createdAt: Float!
+  updatedAt: Float!
+  seller: UnpopulatedUserG!
+}
+
+enum ConditionInput {
+  NEW
+  LIKENEW
+  NWWT
+  USED
+}
+
+enum GenderInput {
+  MALE
+  FEMALE
+}
+
+type UnpopulatedProductG {
+  _id: String!
+  country: Country!
+  name: String!
+  image: String!
+  images: [String!]!
+  condition: ConditionInput!
+  description: String!
+  category: String!
+  faults: String!
+  price: Float!
+  retailPrice: Float
+  brand: String
+  color: [String]
+  isClothing: Boolean!
+  material: String
+  size: SizeG
+  gender: GenderInput
+  createdAt: Float!
+  updatedAt: Float!
+  seller: String!
+}
+
+type TimePeriodG {
+  opening: DateTime!
+  closing: DateTime!
+  days: [Day!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+enum Day {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+}
+
+type BusinessLocationG {
+  firstName: String!
+  lastName: String!
+  address: String!
+  parish: Parish!
+  country: Country!
+  city: String
+  postalCode: String
+  latitude: Float
+  longitude: Float
+  daysAndHours: [TimePeriodG!]!
+  pickup: Boolean!
+  dropOff: Boolean!
+  phone: String!
+}
+
+type DeliveryRateG {
+  parish: Parish!
+  amount: Float!
+}
+
+type SettingG {
+  businessLocations: [BusinessLocationG]!
+  deliveryRates: [DeliveryRateG]!
+  country: Country!
+}
+
+type TransactionG {
+  _id: String!
+  type: TransactionType!
+  paymentGateway: PaymentGateway
+  transactionId: String
+  country: Country!
+  transactionFee: Float
+  purchaseTotal: Float
+  refundTotal: Float
+  payoutTotal: Float
+  buyer: UnpopulatedUserG!
+  products: [UnpopulatedSoldProductG!]!
+}
+
+enum TransactionType {
+  PURCHASE
+  PAYOUT
+  REFUND
+}
+
+enum PaymentGateway {
+  PAYPAL
+  BRAINTREE
+  WIPAY
+  STRIPE
+  TWOCHECKOUT
+}
+
+type UnpopulatedTransactionG {
+  _id: String!
+  type: TransactionType!
+  paymentGateway: PaymentGateway
+  transactionId: String
+  country: Country!
+  transactionFee: Float
+  purchaseTotal: Float
+  refundTotal: Float
+  payoutTotal: Float
+  buyer: String!
+  products: [String!]!
+}
+
+type SoldProductG {
+  _id: String!
+  country: Country!
+  name: String!
+  image: String!
+  images: [String!]!
+  condition: ConditionInput!
+  description: String!
+  category: String!
+  faults: String!
+  price: Float!
+  retailPrice: Float
+  brand: String
+  color: [String]
+  isClothing: Boolean!
+  material: String
+  size: SizeG
+  gender: GenderInput
+  createdAt: Float!
+  updatedAt: Float!
+  seller: UnpopulatedUserG!
+  status: ProductStatus!
+  buyer: UnpopulatedUserG!
+  buyerAddress: AddressG
+  storeAddress: BusinessLocationG
+  deliveredDate: Float
+  trackingID: String
+  reviewed: Boolean
+  transactions: [UnpopulatedTransactionG!]!
+}
+
+enum ProductStatus {
+  PENDINGDELIVERY
+  PENDINGDROPOFF
+  PENDINGCOLLECTION
+  INSTORE
+  INTRANSIT
+  DELIVERED
+  COLLECTED
+  PENDINGREFUND
+  REFUNDED
+  ORDERCOMPLETE
+}
+
+type UnpopulatedSoldProductG {
+  _id: String!
+  country: Country!
+  name: String!
+  image: String!
+  images: [String!]!
+  condition: ConditionInput!
+  description: String!
+  category: String!
+  faults: String!
+  price: Float!
+  retailPrice: Float
+  brand: String
+  color: [String]
+  isClothing: Boolean!
+  material: String
+  size: SizeG
+  gender: GenderInput
+  createdAt: Float!
+  updatedAt: Float!
+  seller: String!
+  status: ProductStatus!
+  buyer: String!
+  buyerAddress: AddressG
+  storeAddress: BusinessLocationG
+  deliveredDate: Float
+  trackingID: String
+  reviewed: Boolean
+  transactions: [String!]!
+}
+
+type DeleteUserRes {
+  message: String!
+}
+
+type InitiateCheckoutResponse {
+  canContinue: Boolean!
+  availableProducts: [UnpopulatedProductG]!
+  unavailableProducts: [UnpopulatedProductG]!
+  timeLimit: Float!
+  gatewayUrl: String
+}
+
+type ReplyG {
+  user: UnpopulatedUserG!
+  comment: String!
+}
+
+type ReviewG {
+  _id: String!
+  buyer: UnpopulatedUserG!
+  seller: UnpopulatedUserG!
+  product: UnpopulatedSoldProductG!
+  comment: String
+  rating: Float!
+  replies: [ReplyG]!
+  createdAt: Float!
+  updatedAt: Float!
+}
+
+type Query {
+  products(country: Country!, search: String, userId: String, condition: ConditionInput, category: String, minPrice: Float, maxPrice: Float, minMeasurement: Float, maxMeasurement: Float, color: String, size: SizeTypeInput, limit: Float, skip: Float, sortPrice: Sort, sortCreated: Sort, sortRelevance: Boolean): [UnpopulatedProductG]!
+  product(productId: String!): ProductG
+  soldProduct(productId: String!): SoldProductG
+  soldProducts(country: Country, sellerId: String, buyerId: String, status: [ProductStatus], reviewed: Boolean, limit: Float, skip: Float, sortCreated: Sort): [UnpopulatedSoldProductG!]
+  validateUser(country: Country): UserG!
+  unpopulatedUserById(userId: String!, country: Country, populate: Boolean, skip: Float, limit: Float, cartItems: Boolean, favoriteProducts: Boolean, favoriteSellers: Boolean): UnpopulatedUserG
+  availability(username: String, phone: String, email: String): String!
+  userById(userId: String!, country: Country, populate: Boolean, skip: Float, limit: Float, cartItems: Boolean, favoriteProducts: Boolean, favoriteSellers: Boolean): UserG
+  user(username: String, email: String, phone: String, populate: Boolean): UserG
+  users(country: Country!, payoutRequest: Boolean, status: Status, limit: Float, skip: Float): [UsersG]!
+  unpopulatedUser(username: String, email: String, phone: String, populate: Boolean): UnpopulatedUserG
+  transaction(transactionId: String!): TransactionG
+  setting(country: Country!): SettingG
+  review(reviewId: String!): ReviewG!
+  reviews(limit: Float, skip: Float, sort: Float, sellerId: String, buyerId: String): [ReviewG]!
+}
+
+enum Sort {
+  ASC
+  DESC
+}
+
+type Mutation {
+  createProduct(createProductDto: CreateProductInput!): ProductG!
+  updateProduct(updateProductDto: UpdateProductInput!): ProductG!
+  deleteProduct(deleteProductDto: DeleteProductInput!): ProductG!
+  deleteSoldProduct(deleteSoldProductDto: DeleteProductInput!): UnpopulatedSoldProductG!
+  updateSoldProductStatus(soldProductStatusDto: SoldProductStatusInput!): SoldProductG!
+  createUser(createUserDto: CreateUserInput!): UserG!
+  login(loginDto: LoginUserInput!): UserG!
+  logout: UnpopulatedUserG!
+  resetPassword(resetPasswordDto: ResetPasswordInput!): UnpopulatedUserG!
+  updateUser(updateUserDto: UpdateUserInput!): UnpopulatedUserG!
+  addUserItem(addUserItemDto: UpdateUserItemInput!): UnpopulatedUserG!
+  removeUserItem(removeUserItemDto: UpdateUserItemInput!): UnpopulatedUserG!
+  payoutUser(payoutUserDto: PayoutUserInput!): PayoutRequestG!
+  deleteUser: DeleteUserRes!
+  cancelCheckout: Boolean!
+  initiateCheckout(initiateCheckoutDto: InitiateCheckoutInput!): InitiateCheckoutResponse!
+  purchaseTransaction(purchaseTransactionDto: PurchaseTransactionInput!): UnpopulatedTransactionG!
+  deleteTransaction(deleteTransactionDto: DeleteTransactionInput!): UnpopulatedTransactionG!
+  createSetting(createSettingDto: CreateSettingInput!): SettingG!
+  updateSetting(updateSettingDto: UpdateSettingInput!): SettingG!
+  createReview(createReviewDto: CreateReviewInput!): ReviewG!
+  updateReview(updateReviewDto: UpdateReviewInput!): ReviewG!
+  deleteReview(deleteReviewDto: DeleteReviewInput!): ReviewG!
+}
+
+input CreateProductInput {
+  country: Country!
+  name: String!
+  image: String!
+  images: [String!]!
+  condition: ConditionInput!
+  description: String
+  category: String!
+  faults: String
+  price: Float!
+  retailPrice: Float
+  brand: String
+  color: [String]
+  isClothing: Boolean
+  material: String
+  size: SizeInput
+  gender: GenderInput
+  seller: String!
+}
+
+input SizeInput {
+  measurement: Float
+  type: SizeTypeInput
+}
+
+input UpdateProductInput {
+  productId: String!
+  country: Country
+  name: String
+  image: String
+  images: [String!]
+  condition: ConditionInput
+  description: String
+  category: String
+  faults: String
+  price: Float
+  retailPrice: Float
+  brand: String
+  color: [String]
+  isClothing: Boolean
+  material: String
+  size: SizeInput
+  gender: GenderInput
+}
+
+input DeleteProductInput {
+  productId: String!
+}
+
+input SoldProductStatusInput {
+  productStatus: ProductStatus!
+  productId: String!
+  trackingId: String
+  storeAddress: BusinessLocationInput
+}
+
+input BusinessLocationInput {
+  firstName: String!
+  lastName: String!
+  address: String!
+  parish: Parish!
+  country: Country!
+  city: String
+  postalCode: String
+  latitude: Float
+  longitude: Float
+  daysAndHours: [TimePeriodInput!]!
+  pickup: Boolean
+  dropOff: Boolean
+  phone: String!
+}
+
+input TimePeriodInput {
+  opening: DateTime!
+  closing: DateTime!
+  days: [Day!]!
+}
+
+input CreateUserInput {
+  username: String!
+  image: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  phone: String!
+  country: Country!
+  password: String!
+  fcmToken: String
+}
+
+input LoginUserInput {
+  username: String
+  phone: String
+  email: String
+  fcmToken: String
+  password: String!
+}
+
+input ResetPasswordInput {
+  phone: String!
+  password: String!
+}
+
+input UpdateUserInput {
+  status: String
+  image: String
+  firstName: String
+  lastName: String
+  email: String
+  country: Country
+  phone: String
+  password: String
+  fcmToken: String
+  addresses: [AddressInput!]
+  bankAccount: BankAccountInput
+  payoutRequest: PayoutRequestInput
+}
+
+input AddressInput {
+  firstName: String!
+  lastName: String!
+  address: String!
+  parish: Parish!
+  country: Country!
+  city: String
+  postalCode: String
+  latitude: Float
+  longitude: Float
+}
+
+input BankAccountInput {
+  name: String!
+  number: String!
+  bank: String!
+  details: String
+}
+
+input PayoutRequestInput {
+  active: Boolean!
+  amount: Float!
+}
+
+input UpdateUserItemInput {
+  favoriteProducts: String
+  favoriteSellers: String
+  cart: String
+}
+
+input PayoutUserInput {
+  userId: String!
+}
+
+input InitiateCheckoutInput {
+  country: Country!
+  sandbox: Boolean
+}
+
+input PurchaseTransactionInput {
+  country: Country!
+  address: AddressInput
+  total: String!
+  transactionFee: Float
+  nonce: String
+  transactionID: String
+  sandbox: Boolean
+}
+
+input DeleteTransactionInput {
+  transactionId: String!
+}
+
+input CreateSettingInput {
+  businessLocations: [BusinessLocationInput]!
+  deliveryRates: [DeliveryRateInput]!
+  country: Country!
+}
+
+input DeliveryRateInput {
+  parish: Parish!
+  amount: Float!
+}
+
+input UpdateSettingInput {
+  businessLocations: [BusinessLocationInput]
+  deliveryRates: [DeliveryRateInput]
+  country: Country!
+}
+
+input CreateReviewInput {
+  sellerId: String!
+  buyerId: String!
+  productId: String!
+  comment: String
+  rating: Float!
+}
+
+input UpdateReviewInput {
+  reviewId: String!
+  comment: String!
+}
+
+input DeleteReviewInput {
+  reviewId: String!
+}

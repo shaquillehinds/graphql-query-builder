@@ -8,18 +8,20 @@ type QueryType = "query" | "mutation";
 interface BuildQueryParams<Params, Fields> {
   type: QueryType;
   name: string;
+  enums?: string[];
   params?: Params;
   fields?: Fields;
 }
 
-export default function queryBuilder<Params, Fields>() {
+export function queryBuilder<Params, Fields>() {
   return (data: BuildQueryParams<Params, Fields>) =>
     buildQuery<Params, Fields>(data);
 }
 
-export function buildQuery<Params, Fields>({
+export default function buildQuery<Params, Fields>({
   type,
   name,
+  enums,
   params,
   fields,
 }: BuildQueryParams<Params, Fields>): string {
@@ -27,7 +29,9 @@ export function buildQuery<Params, Fields>({
     typeof params === "object" ? parseQueryParams(params as QueryObject) : "";
   const requestFields =
     typeof fields === "object" ? objectToQueryFields<Fields>(fields) : "";
-  return `${type} { ${name} ${queryParams} ${requestFields} }`;
+  let query = `${type} { ${name} ${queryParams} ${requestFields} }`;
+  if (enums) query = enumifyEnums(query, enums);
+  return query;
 }
 
 function objectToQueryParam(object: QueryObject): string {
@@ -103,4 +107,12 @@ function objectToQueryFields<Fields>(object: Fields, fieldString = ""): string {
   }
   fieldString += "} ";
   return isEmpty ? "" : fieldString;
+}
+
+function enumifyEnums(str: string, enumList: string[]) {
+  enumList.forEach((e) => {
+    const regex = new RegExp(`"${e}"`, "gm");
+    str = str.replace(regex, e.toUpperCase());
+  });
+  return str;
 }
