@@ -26,8 +26,12 @@ program
           join(outDir, "GQLAPI.ts")
         );
       } else {
-        fs.writeFileSync(`./${f}.ts`, tsFiles[f]);
-        fs.copyFileSync(join(__dirname, "./GQLAPI.template"), "GQLAPI.ts");
+        if (!fs.existsSync("./GQLAPI")) fs.mkdirSync("./GQLAPI");
+        fs.writeFileSync(`./GQLAPI/${f}.ts`, tsFiles[f]);
+        fs.copyFileSync(
+          join(__dirname, "./GQLAPI.template"),
+          "./GQLAPI/GQLAPI.ts"
+        );
       }
     }
     process.exit(0);

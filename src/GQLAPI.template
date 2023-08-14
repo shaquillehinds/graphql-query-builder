@@ -1,6 +1,7 @@
 import { Queries, QueriesMap } from "./queries";
 import { Mutations, MutationsMap } from "./mutations";
 import * as GQLTypes from "./types";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
 
 interface QueryObject {
   [key: string]: any;
@@ -49,9 +50,52 @@ type ExtractReturnType<T extends Queries | Mutations> = {
 };
 
 export default class GQLAPI {
-  private fetcher?: FetchingFunction;
-  constructor(fetcher?: FetchingFunction) {
-    this.fetcher = fetcher;
+  private fetcher: FetchingFunction;
+  constructor(
+    init:
+      | { fetcher: FetchingFunction; gqlEndpoint?: undefined }
+      | {
+          fetcher?: undefined;
+          gqlEndpoint: string;
+          options?: AxiosRequestConfig;
+        }
+  ) {
+    if (init.fetcher) {
+      this.fetcher = init.fetcher;
+    } else {
+      this.fetcher = async (query: string) => {
+        try {
+          const { data } = await axios.post(
+            init.gqlEndpoint,
+            {
+              query,
+            },
+            init.options
+          );
+          if (data.errors && data.errors.length > 0) {
+            throw new Error(data.errors[0].message);
+          }
+          return data.data;
+        } catch (error) {
+          if (error instanceof AxiosError) {
+            if (error.response) {
+              if (
+                error.response.data.errors &&
+                error.response.data.errors.length > 0
+              )
+                throw new Error(error.response.data.errors[0].message);
+              else if (error.response.data)
+                throw new Error(error.response.data);
+              else throw new Error(error.message);
+            } else {
+              throw new Error(error.message);
+            }
+          } else if (error instanceof Error) {
+            throw new Error(error.message);
+          }
+        }
+      };
+    }
   }
   async query<Query extends Queries>(query: Query, fetcher?: FetchingFunction) {
     type ReturnType = ExtractReturnType<Query>;
