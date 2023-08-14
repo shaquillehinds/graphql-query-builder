@@ -24,7 +24,9 @@ export default function buildMutations(match: string, tsAliases: string) {
     const mutationMap = `${mutationName}: ${convertType(
       mutationReturn.replace(/[\[\]!\s]/g, ""),
       savedTypes
-    )};`;
+    )}${mutationReturn.includes("[") ? "[]" : ""}${
+      !mutationReturn.includes("!") ? " | null" : ""
+    };`;
     mutationsMap += `\n${mutationMap}`;
     mutations += `\n${mutation}`;
   }

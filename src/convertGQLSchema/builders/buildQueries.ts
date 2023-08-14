@@ -21,7 +21,9 @@ export default function buildQueries(queryMatch: string, tsAliases: string) {
     const queryMap = `${queryName}: ${convertType(
       queryReturn.replace(/[\[\]!\s]/g, ""),
       savedTypes
-    )};`;
+    )}${queryReturn.includes("[") ? "[]" : ""}${
+      !queryReturn.includes("!") ? " | null" : ""
+    };`;
     queriesMap += `\n${queryMap}`;
     queries += `\n${query}`;
   }

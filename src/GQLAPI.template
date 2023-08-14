@@ -1,6 +1,7 @@
 import { Queries, QueriesMap } from "./queries";
 import { Mutations, MutationsMap } from "./mutations";
 import * as GQLTypes from "./types";
+
 interface QueryObject {
   [key: string]: any;
 }
@@ -11,32 +12,38 @@ interface BuildQueryParams<Params, Fields> {
   fields?: Fields;
 }
 
-type FetchingFunction = <Data = any>(queryString: string) => Promise<Data>;
+export type FetchingFunction = <Data = any>(
+  queryString: string
+) => Promise<Data>;
 
-type ExtractQueryReturnType<Query extends Queries> = {
-  [K in keyof Query]: K extends keyof QueriesMap
-    ? Query[K] extends { returns: infer R }
-      ? R extends boolean
-        ? QueriesMap[K]
-        : {
-            [K3 in keyof R]: K3 extends keyof QueriesMap[K]
-              ? QueriesMap[K][K3]
-              : R[K3];
-          }
-      : never
-    : never;
-};
-
-type ExtractMutationReturnType<Mutation extends Mutations> = {
-  [K in keyof Mutation]: K extends keyof MutationsMap
-    ? Mutation[K] extends { returns: infer R }
-      ? R extends boolean
-        ? MutationsMap[K]
-        : {
-            [K3 in keyof R]: K3 extends keyof MutationsMap[K]
-              ? MutationsMap[K][K3]
-              : R[K3];
-          }
+// Some conditionals in this type might seem weird but please note that typescript doesn't do hard conditionals
+// True and false are never strict and if a type partially agrees with a condition then a transformation can be applied
+// In the following type if QueryMapValue extends null we would like to just return QueryMapValue | null
+// however QueryMapValue also isn't null so the following conditional will still be applied
+// Also if we get a value that is an array and extends null then both extends null and extends any[] true conditions will be applied
+//prettier-ignore
+type ExtractReturnType<T extends Queries | Mutations> = {
+  [Key in keyof T]: Key extends keyof (T extends Queries ? QueriesMap : MutationsMap)
+    ? T[Key] extends infer Value
+      ? (T extends Queries ? QueriesMap : MutationsMap)[Key] extends infer MapValue
+        ? Value extends { returns: infer Returns }
+          ? Returns extends boolean
+            ? MapValue
+            : MapValue extends any[]
+            ? {
+                [ReturnsKey in keyof Returns]: ReturnsKey extends keyof MapValue[number]
+                  ? MapValue[number][ReturnsKey]
+                  : Returns[ReturnsKey];
+              }[]
+            : MapValue extends null // can also be written as null extends MapValue
+            ? MapValue // will be QueryMapValue | null
+            : {
+                [ReturnsKey in keyof Returns]: ReturnsKey extends keyof MapValue
+                  ? MapValue[ReturnsKey]
+                  : Returns[ReturnsKey];
+              }// This will still run as a transformation
+          : never
+        : never
       : never
     : never;
 };
@@ -47,7 +54,7 @@ export default class GQLAPI {
     this.fetcher = fetcher;
   }
   async query<Query extends Queries>(query: Query, fetcher?: FetchingFunction) {
-    type ReturnType = ExtractQueryReturnType<Query>;
+    type ReturnType = ExtractReturnType<Query>;
     if (!fetcher && !this.fetcher) {
       throw new Error("Provide a fetching function");
     }
@@ -61,7 +68,7 @@ export default class GQLAPI {
     mutation: Mutation,
     fetcher?: FetchingFunction
   ) {
-    type ReturnType = ExtractMutationReturnType<Mutation>;
+    type ReturnType = ExtractReturnType<Mutation>;
     if (!fetcher && !this.fetcher) {
       throw new Error("Provide a fetching function");
     }
