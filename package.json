@@ -1,6 +1,6 @@
 {
   "name": "@shaquillehinds/graphql-query-builder",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Simple function to build a graphql query",
   "repository": {
     "type": "git",
@@ -8,7 +8,7 @@
   },
   "main": "dist/index.js",
   "bin": {
-    "gql-api": "dist/index.bin.js"
+    "gql-builder": "dist/index.bin.js"
   },
   "author": {
     "name": "Shaquille Hinds",
